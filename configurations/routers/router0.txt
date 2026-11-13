@@ -1,0 +1,88 @@
+# Router Configuration
+# Device hostname: Router0
+# Platform: Cisco 2911
+# IOS Version: 15.1
+# Project: Johannesburg City Parks and Zoo (JCPZ) Enterprise Network
+
+! ==========================================
+! 1. BASIC DEVICE CONFIGURATION
+! ==========================================
+
+version 15.1
+hostname Router
+
+no service timestamps log datetime msec
+no service timestamps debug datetime msec
+no service password-encryption
+
+no ip cef
+no ipv6 cef
+
+! ==========================================
+! 2. GIGABIT ETHERNET INTERFACES
+! ==========================================
+
+! Connection to Primary Multilayer Switch
+interface GigabitEthernet0/0
+ ip address 192.168.102.86 255.255.255.252
+ duplex auto
+ speed auto
+
+! Connection to Secondary Multilayer Switch
+interface GigabitEthernet0/1
+ ip address 192.168.102.74 255.255.255.252
+ duplex auto
+ speed auto
+
+! Unused interface
+interface GigabitEthernet0/2
+ no ip address
+ duplex auto
+ speed auto
+ shutdown
+
+! ==========================================
+! 3. SERIAL WAN INTERFACES
+! ==========================================
+
+interface Serial0/2/0
+ ip address 195.136.17.26 255.255.255.252
+
+interface Serial0/2/1
+ ip address 195.136.17.10 255.255.255.252
+ clock rate 2000000
+
+interface Serial0/3/0
+ ip address 195.136.17.21 255.255.255.252
+
+interface Serial0/3/1
+ ip address 195.136.17.6 255.255.255.252
+ clock rate 64000
+
+! ==========================================
+! 4. VLAN INTERFACE
+! ==========================================
+
+interface Vlan1
+ no ip address
+ shutdown
+
+! ==========================================
+! 5. ROUTING AND FLOW EXPORT
+! ==========================================
+
+ip classless
+ip flow-export version 9
+
+! ==========================================
+! 6. LINE CONFIGURATION
+! ==========================================
+
+line con 0
+
+line aux 0
+
+line vty 0 4
+ login
+
+end

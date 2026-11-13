@@ -1,0 +1,98 @@
+# Router2 Configuration - WAN Aggregation
+# Device: Router2
+# Platform: Cisco 2911
+# IOS Version: 15.1
+# Project: Johannesburg City Parks and Zoo (JCPZ) Enterprise Network
+
+! ==========================================
+! 1. BASIC DEVICE CONFIGURATION
+! ==========================================
+
+version 15.1
+hostname Router2
+
+no service timestamps log datetime msec
+no service timestamps debug datetime msec
+no service password-encryption
+
+no ip cef
+no ipv6 cef
+
+! ==========================================
+! 2. GIGABIT ETHERNET INTERFACES
+! ==========================================
+
+interface GigabitEthernet0/0
+ no ip address
+ duplex auto
+ speed auto
+ shutdown
+
+interface GigabitEthernet0/1
+ no ip address
+ duplex auto
+ speed auto
+ shutdown
+
+interface GigabitEthernet0/2
+ no ip address
+ duplex auto
+ speed auto
+
+! ==========================================
+! 3. VLAN 70 SUBINTERFACE
+! ==========================================
+
+interface GigabitEthernet0/2.70
+ encapsulation dot1Q 70
+ ip address 192.168.70.1 255.255.255.0
+
+! ==========================================
+! 4. SERIAL WAN INTERFACES
+! ==========================================
+
+interface Serial0/3/0
+ ip address 195.136.17.18 255.255.255.252
+ clock rate 2000000
+
+interface Serial0/3/1
+ ip address 195.136.17.22 255.255.255.252
+ clock rate 2000000
+
+! ==========================================
+! 5. VLAN 1 INTERFACE
+! ==========================================
+
+interface Vlan1
+ no ip address
+ shutdown
+
+! ==========================================
+! 6. OSPF DYNAMIC ROUTING
+! ==========================================
+
+router ospf 1
+ log-adjacency-changes
+ network 195.136.17.16 0.0.0.3 area 0
+ network 195.136.17.20 0.0.0.3 area 0
+ network 192.168.70.0 0.0.0.255 area 0
+
+! ==========================================
+! 7. IP ROUTING AND FLOW EXPORT
+! ==========================================
+
+ip classless
+ip flow-export version 9
+
+! ==========================================
+! 8. LINE CONFIGURATION
+! ==========================================
+
+line con 0
+
+line aux 0
+
+line vty 0 4
+ login
+
+end

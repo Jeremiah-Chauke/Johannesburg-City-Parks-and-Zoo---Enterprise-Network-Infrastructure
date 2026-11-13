@@ -1,0 +1,89 @@
+# ISP1 Configuration
+# Device: ISP1
+# Platform: Cisco 2911
+# IOS Version: 15.1
+# Project: Johannesburg City Parks and Zoo (JCPZ) Enterprise Network
+
+! ==========================================
+! 1. BASIC DEVICE CONFIGURATION
+! ==========================================
+
+version 15.1
+hostname ISP1
+
+no service timestamps log datetime msec
+no service timestamps debug datetime msec
+no service password-encryption
+
+no ip cef
+no ipv6 cef
+
+! ==========================================
+! 2. GIGABIT ETHERNET INTERFACES
+! ==========================================
+
+interface GigabitEthernet0/0
+ no ip address
+ duplex auto
+ speed auto
+ shutdown
+
+interface GigabitEthernet0/1
+ no ip address
+ duplex auto
+ speed auto
+ shutdown
+
+interface GigabitEthernet0/2
+ no ip address
+ duplex auto
+ speed auto
+ shutdown
+
+! ==========================================
+! 3. SERIAL WAN INTERFACES
+! ==========================================
+
+interface Serial0/2/0
+ no ip address
+ clock rate 2000000
+ shutdown
+
+interface Serial0/2/1
+ no ip address
+ clock rate 2000000
+ shutdown
+
+interface Serial0/3/0
+ ip address 195.136.17.9 255.255.255.252
+
+interface Serial0/3/1
+ ip address 195.136.17.13 255.255.255.252
+
+! ==========================================
+! 4. VLAN 1 INTERFACE
+! ==========================================
+
+interface Vlan1
+ no ip address
+ shutdown
+
+! ==========================================
+! 5. ROUTING AND FLOW EXPORT
+! ==========================================
+
+ip classless
+ip flow-export version 9
+
+! ==========================================
+! 6. LINE CONFIGURATION
+! ==========================================
+
+line con 0
+
+line aux 0
+
+line vty 0 4
+ login
+
+end

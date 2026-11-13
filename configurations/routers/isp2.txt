@@ -1,0 +1,76 @@
+# ISP2 Router Configuration
+# Device: Cisco 2911
+# Hostname: ISP2
+# IOS Version: 15.1
+
+## 1. Device Configuration
+
+```cisco
+hostname ISP2
+no ip cef
+no ipv6 cef
+spanning-tree mode pvst
+```
+
+## 2. Serial Interface Configuration
+
+### Serial0/2/0
+```cisco
+interface Serial0/2/0
+ ip address 195.136.17.5 255.255.255.252
+```
+
+### Serial0/2/1
+```cisco
+interface Serial0/2/1
+ ip address 195.136.17.1 255.255.255.252
+ clock rate 2000000
+```
+
+### Unused Serial Interfaces
+```cisco
+interface Serial0/3/0
+ no ip address
+ shutdown
+
+interface Serial0/3/1
+ no ip address
+ shutdown
+```
+
+## 3. Unused Gigabit Ethernet Interfaces
+
+```cisco
+interface GigabitEthernet0/0
+ no ip address
+ shutdown
+
+interface GigabitEthernet0/1
+ no ip address
+ shutdown
+
+interface GigabitEthernet0/2
+ no ip address
+ shutdown
+```
+
+## 4. VLAN Interface
+
+```cisco
+interface Vlan1
+ no ip address
+ shutdown
+```
+
+## 5. Routing Configuration
+
+The current running configuration does not contain any static routes or dynamic routing protocol configuration.
+
+## 6. Configuration Notes
+
+- ISP2 uses two serial interfaces to connect to the enterprise network.
+- Serial0/2/0 uses IP address `195.136.17.5/30`.
+- Serial0/2/1 uses IP address `195.136.17.1/30`.
+- A clock rate of `2000000` is configured on Serial0/2/1.
+- Unused Gigabit Ethernet and serial interfaces are administratively shut down.
+- Routing configuration and connectivity should be verified as part of the complete network simulation.

@@ -1,0 +1,54 @@
+# SERVER-SW1 Configuration
+# Device Type: Layer 2 Server-Room Switch
+# Switching Technology: Rapid-PVST
+# Server VLAN: VLAN 60
+
+enable
+configure terminal
+
+! Set device hostname
+hostname SERVER-SW1
+
+! Spanning Tree Configuration
+spanning-tree mode rapid-pvst
+spanning-tree extend system-id
+
+! EtherChannel Configuration
+interface range GigabitEthernet0/1 - 2
+ switchport mode trunk
+ channel-group 1 mode active
+ no shutdown
+exit
+
+! Port-Channel Configuration
+interface Port-channel1
+ switchport mode trunk
+ no shutdown
+exit
+
+! Trunk Links
+interface range FastEthernet0/1 - 2
+ switchport mode trunk
+ no shutdown
+exit
+
+! Server Access Ports - VLAN 60
+interface range FastEthernet0/3 - 6
+ switchport mode access
+ switchport access vlan 60
+ spanning-tree portfast
+ spanning-tree bpduguard enable
+ no shutdown
+exit
+
+! Disable Unused VLAN 1 Interface
+interface Vlan1
+ no ip address
+ shutdown
+exit
+
+! Security Banner
+banner motd ^CUnauthorized Access Prohibited!^C
+
+end
+write memory

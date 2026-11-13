@@ -1,0 +1,82 @@
+# IT Access Switch Configuration
+# Device: IT-SW
+# IOS Version: 15.0
+
+## 1. Basic Configuration
+
+```cisco
+hostname IT-SW
+spanning-tree mode pvst
+spanning-tree extend system-id
+banner motd ^CUnauthorized Access Prohibited!^C
+```
+
+## 2. Trunk Port Configuration
+
+Fa0/1 and Fa0/2 are configured as trunk ports to carry traffic between the access switch and the network's upstream switches.
+
+```cisco
+interface FastEthernet0/1
+ switchport mode trunk
+
+interface FastEthernet0/2
+ switchport mode trunk
+```
+
+## 3. IT Department Access Ports
+
+Ports Fa0/3–Fa0/5 and Fa0/7–Fa0/24 are configured for IT department devices.
+
+```cisco
+interface range FastEthernet0/3 - 5
+ switchport mode access
+ switchport access vlan 10
+ switchport voice vlan 100
+ spanning-tree portfast
+
+interface range FastEthernet0/7 - 24
+ switchport mode access
+ switchport access vlan 10
+ switchport voice vlan 100
+ spanning-tree portfast
+```
+
+## 4. Disabled Access Port
+
+```cisco
+interface FastEthernet0/6
+ switchport mode access
+ switchport access vlan 10
+ switchport voice vlan 100
+ spanning-tree portfast
+ shutdown
+```
+
+## 5. Unused Gigabit Ethernet Interfaces
+
+```cisco
+interface GigabitEthernet0/1
+ shutdown
+
+interface GigabitEthernet0/2
+ shutdown
+```
+
+## 6. VLAN 1 Interface
+
+```cisco
+interface Vlan1
+ no ip address
+ shutdown
+```
+
+## 7. Configuration Notes
+
+- VLAN 10 is used for IT department data traffic.
+- VLAN 100 is designated for IP phone voice traffic.
+- Fa0/1 and Fa0/2 provide trunk connectivity.
+- PortFast is enabled on end-user access ports to allow faster transition to forwarding.
+- Fa0/6 is disabled.
+- PVST is enabled for spanning-tree management.
+- No management IP address is configured on VLAN 1.
+- The configuration shown does not include explicit trunk allowed-VLAN restrictions or port-security settings.

@@ -1,0 +1,79 @@
+# Marketing Access Switch Configuration
+# Device: MARKETING-SW
+# IOS Version: 15.0
+
+## 1. Basic Configuration
+
+```cisco
+hostname MARKERING-SW
+spanning-tree mode pvst
+spanning-tree extend system-id
+banner motd ^CUnauthorized Access Prohibited!^C
+```
+
+## 2. Trunk Port Configuration
+
+Fa0/1 and Fa0/2 provide trunk connectivity to the upstream network switches.
+
+```cisco
+interface FastEthernet0/1
+ switchport mode trunk
+
+interface FastEthernet0/2
+ switchport mode trunk
+```
+
+## 3. Marketing Department Access Ports
+
+Fa0/3–Fa0/5 are enabled for Marketing department devices.
+
+```cisco
+interface range FastEthernet0/3 - 5
+ switchport mode access
+ switchport access vlan 50
+ switchport voice vlan 100
+ spanning-tree portfast
+```
+
+## 4. Disabled Access Ports
+
+Fa0/6–Fa0/24 are assigned to VLAN 50 with voice VLAN 100, but are administratively shut down.
+
+```cisco
+interface range FastEthernet0/6 - 24
+ switchport mode access
+ switchport access vlan 50
+ switchport voice vlan 100
+ spanning-tree portfast
+ shutdown
+```
+
+## 5. Unused Gigabit Ethernet Interfaces
+
+```cisco
+interface GigabitEthernet0/1
+ shutdown
+
+interface GigabitEthernet0/2
+ shutdown
+```
+
+## 6. VLAN 1 Interface
+
+```cisco
+interface Vlan1
+ no ip address
+ shutdown
+```
+
+## 7. Configuration Notes
+
+- VLAN 50 is used for Marketing department data traffic.
+- VLAN 100 is designated for IP phone voice traffic.
+- Fa0/1 and Fa0/2 are configured as trunk ports.
+- Fa0/3–Fa0/5 are enabled for end-user connections.
+- Fa0/6–Fa0/24 are administratively disabled.
+- PortFast is enabled on the access ports.
+- PVST is enabled for spanning-tree management.
+- No management IP address is configured on VLAN 1.
+- Explicit trunk allowed-VLAN restrictions and port-security settings are not shown in the supplied configuration.

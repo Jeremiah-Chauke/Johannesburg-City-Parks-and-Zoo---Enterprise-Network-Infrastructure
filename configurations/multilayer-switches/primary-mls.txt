@@ -1,0 +1,181 @@
+# Primary Multilayer Switch Configuration
+# Device: Primary_MLS
+# Platform: Cisco Multilayer Switch
+# IOS Version: 16.3.2
+# Project: Johannesburg City Parks and Zoo (JCPZ) Enterprise Network
+
+! ==========================================
+! 1. BASIC DEVICE CONFIGURATION
+! ==========================================
+
+version 16.3.2
+hostname Primary_MLS
+
+no service timestamps log datetime msec
+no service timestamps debug datetime msec
+no service password-encryption
+
+no ip cef
+ip routing
+no ipv6 cef
+
+! ==========================================
+! 2. SPANNING TREE CONFIGURATION
+! ==========================================
+
+spanning-tree mode pvst
+spanning-tree vlan 10,20,30,40,50,60,100 priority 24576
+
+! ==========================================
+! 3. ETHERCHANNEL CONFIGURATION
+! ==========================================
+
+interface Port-channel1
+ switchport mode trunk
+
+interface GigabitEthernet1/0/6
+ switchport mode trunk
+ channel-protocol lacp
+ channel-group 1 mode active
+
+! ==========================================
+! 4. WAN ROUTED INTERFACES
+! ==========================================
+
+interface GigabitEthernet1/0/7
+ no switchport
+ ip address 192.168.102.85 255.255.255.252
+ duplex auto
+ speed auto
+
+interface GigabitEthernet1/0/8
+ no switchport
+ ip address 192.168.102.81 255.255.255.252
+ duplex auto
+ speed auto
+
+! ==========================================
+! 5. VLAN 1 CONFIGURATION
+! ==========================================
+
+interface Vlan1
+ no ip address
+ shutdown
+
+! ==========================================
+! 6. VLAN 10 - IT
+! ==========================================
+
+interface Vlan10
+ mac-address 0001.97c1.9301
+ ip address 192.168.10.2 255.255.255.0
+ ip helper-address 192.168.60.10
+ standby 10 ip 192.168.10.1
+ standby 10 priority 110
+ standby 10 preempt
+
+! ==========================================
+! 7. VLAN 20 - FINANCE
+! ==========================================
+
+interface Vlan20
+ mac-address 0001.97c1.9302
+ ip address 192.168.20.2 255.255.255.0
+ ip helper-address 192.168.60.10
+ standby 20 ip 192.168.20.1
+ standby 20 priority 110
+ standby 20 preempt
+
+! ==========================================
+! 8. VLAN 30 - PROCUREMENT
+! ==========================================
+
+interface Vlan30
+ mac-address 0001.97c1.9303
+ ip address 192.168.30.2 255.255.255.0
+ ip helper-address 192.168.60.10
+ standby 30 ip 192.168.30.1
+ standby 30 priority 110
+ standby 30 preempt
+
+! ==========================================
+! 9. VLAN 40 - HUMAN RESOURCES
+! ==========================================
+
+interface Vlan40
+ mac-address 0001.97c1.9304
+ ip address 192.168.40.2 255.255.255.0
+ ip helper-address 192.168.60.10
+ standby 40 ip 192.168.40.1
+ standby 40 priority 110
+ standby 40 preempt
+
+! ==========================================
+! 10. VLAN 50 - MARKETING
+! ==========================================
+
+interface Vlan50
+ mac-address 0001.97c1.9305
+ ip address 192.168.50.2 255.255.255.0
+ ip helper-address 192.168.60.10
+ standby 50 ip 192.168.50.1
+ standby 50 priority 110
+ standby 50 preempt
+
+ ! ==========================================
+! 11. VLAN 60 - SERVERS
+! ==========================================
+
+interface Vlan60
+ mac-address 0001.97c1.9306
+ ip address 192.168.60.2 255.255.255.0
+ ip helper-address 192.168.60.10
+ standby 60 ip 192.168.60.1
+ standby 60 priority 110
+ standby 60 preempt
+
+! ==========================================
+! 12. VLAN 100 - VOICE
+! ==========================================
+
+interface Vlan100
+ mac-address 0001.97c1.9307
+ ip address 192.168.100.2 255.255.255.0
+ ip helper-address 192.168.60.10
+ standby 100 ip 192.168.100.1
+ standby 100 priority 110
+ standby 100 preempt
+
+! ==========================================
+! 13. VLAN 404
+! ==========================================
+
+interface Vlan404
+ mac-address 0001.97c1.9308
+ no ip address
+
+! ==========================================
+! 14. DEFAULT ROUTE
+! ==========================================
+
+ip classless
+ip route 0.0.0.0 0.0.0.0 192.168.102.82
+
+! ==========================================
+! 15. FLOW EXPORT
+! ==========================================
+
+ip flow-export version 9
+
+! ==========================================
+! 16. LINE CONFIGURATION
+! ==========================================
+
+line con 0
+
+line aux 0
+
+line vty 0 4
+ login
+
+end
